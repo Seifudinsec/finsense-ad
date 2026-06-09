@@ -13,7 +13,6 @@ const { fontFamily } = loadFont("normal", {
 });
 
 const RED = "#ea384c";
-const DARK_RED = "#DE1117";
 const LIGHT_RED = "#f87171";
 const BG = "#080808";
 
@@ -29,32 +28,11 @@ const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
 export const IntroScene: React.FC = () => {
   const frame = useCurrentFrame();
 
-  /* ── "FinSense" headline ── */
-  const nameOpacity = interpolate(frame, [28, 46], [0, 1], {
+  /* ── Tagline reveal ── */
+  const taglineOpacity = interpolate(frame, [85, 105], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
-  const nameY = interpolate(frame, [28, 46], [36, 0], {
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  /* ── "Africa" sub-word ── */
-  const africaOpacity = interpolate(frame, [38, 56], [0, 1], {
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  /* ── Amaranth divider line sweep ── */
-  const lineWidth = interpolate(frame, [54, 70], [0, 320], {
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  /* ── Tagline ── */
-  const taglineOpacity = interpolate(frame, [66, 82], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const taglineY = interpolate(frame, [66, 82], [16, 0], {
+  const taglineY = interpolate(frame, [85, 105], [20, 0], {
     easing: Easing.bezier(0.16, 1, 0.3, 1),
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
@@ -93,43 +71,16 @@ export const IntroScene: React.FC = () => {
         alignItems: "center", justifyContent: "center",
       }}>
 
-        {/* Brand logo mark */}
-        <div style={{ marginBottom: 30 }}>
-          <FinSenseLogo size={128} color={RED} animate={true} />
+        {/* Brand logo (Icon + Seamless Text reveal) */}
+        <div style={{ marginBottom: 40 }}>
+          <FinSenseLogo size={140} color={RED} animate={true} />
         </div>
 
-        {/* FinSense wordmark */}
-        <div style={{
-          transform: `translateY(${nameY}px)`, opacity: nameOpacity,
-          fontWeight: 900, fontSize: 84, color: "white",
-          letterSpacing: -3, lineHeight: 1, textAlign: "center",
-        }}>
-          FinSense
-        </div>
-
-        {/* Africa */}
-        <div style={{
-          opacity: africaOpacity,
-          fontWeight: 300, fontSize: 30, color: RED,
-          letterSpacing: 14, textTransform: "uppercase",
-          marginTop: 8, marginBottom: 32, textAlign: "center",
-          textShadow: `0 0 10px rgba(234, 56, 76, 0.3)`,
-        }}>
-          Africa
-        </div>
-
-        {/* Red line */}
-        <div style={{
-          width: lineWidth, height: 2,
-          background: `linear-gradient(90deg, transparent, ${RED}, transparent)`,
-          borderRadius: 1, marginBottom: 26,
-        }} />
-
-        {/* Tagline */}
+        {/* Tagline reveals after logo is fully shown */}
         <div style={{
           opacity: taglineOpacity,
           transform: `translateY(${taglineY}px)`,
-          fontWeight: 400, fontSize: 18,
+          fontWeight: 400, fontSize: 20,
           color: "rgba(255,255,255,0.60)",
           letterSpacing: 4, textTransform: "uppercase", textAlign: "center",
         }}>
