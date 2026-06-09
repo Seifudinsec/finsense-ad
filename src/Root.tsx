@@ -2,13 +2,13 @@ import { Composition } from "remotion";
 import { FinsenseAd } from "./FinsenseAd";
 
 // Scene durations
-const INTRO   = 120;  // 4s
-const PRODUCT = 90;   // 3s each × 3
-const REVIEWS = 90;   // 3s
-const CTA     = 120;  // 4s
-const TRANS   = 24;   // transition overlap × 5
+const INTRO   = 135;  // 4.5s
+const PRODUCT = 120;  // 4s each × 3
+const REVIEWS = 150;  // 5s
+const CTA     = 135;  // 4.5s
+const TRANS   = 18;   // transition overlap × 5
 
-// Total: 120 + 270 + 90 + 120 - 120 = 480 frames = 16.0s
+// Total: 135 + 360 + 150 + 135 - 90 = 690 frames = 23.0s
 const TOTAL = INTRO + PRODUCT * 3 + REVIEWS + CTA - TRANS * 5;
 
 export const RemotionRoot: React.FC = () => {
