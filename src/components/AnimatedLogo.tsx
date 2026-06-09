@@ -55,6 +55,7 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   const iconSize = 72 * scale;
   const mainSize = 46 * scale;
   const subSize  = 17 * scale;
+  const wrapperShift = -iconX / 2;
 
   return (
     <div style={{
@@ -64,6 +65,15 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       justifyContent: "center",
       position: "relative",
     }}>
+
+      <div style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        transform: `translateX(${wrapperShift}px)`,
+        transformOrigin: "center center",
+      }}>
 
       {/* ── Icon ── */}
       <div style={{
@@ -146,6 +156,8 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
         </div>
       </div>
 
+      </div>
+
     </div>
-  );
-};
+
+  );};
