@@ -26,8 +26,8 @@ const { fontFamily } = loadFont("normal", {
 const RED = "#ea384c";
 const LIGHT_RED = "#f87171";
 const BG = "#080808";
-const CARD_W = 520;
-const CARD_GAP = 36;
+const CARD_W = 600;
+const CARD_GAP = 40;
 const ROW_SPAN = (CARD_W + CARD_GAP) * 6;
 
 const TESTIMONIALS = [
@@ -105,7 +105,7 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
     <div
       style={{
         flex: `0 0 ${CARD_W}px`,
-        height: 154,
+        height: 180,
         display: "flex",
         gap: 20,
         padding: "24px 28px",
@@ -147,7 +147,7 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
             lineHeight: 1.38,
             color: "rgba(255,255,255,0.76)",
             fontWeight: 400,
-            height: 84,
+            height: 104,
             overflow: "hidden",
           }}
         >
@@ -189,7 +189,7 @@ const MarqueeRow: React.FC<{
   opacity: number;
 }> = ({ direction, offset, opacity }) => {
   const frame = useCurrentFrame();
-  const distance = interpolate(frame + offset, [0, 540], [0, ROW_SPAN], {
+  const distance = interpolate(frame + offset, [0, 900], [0, ROW_SPAN], {
     extrapolateLeft: "extend",
     extrapolateRight: "extend",
   });
@@ -203,7 +203,7 @@ const MarqueeRow: React.FC<{
       style={{
         position: "relative",
         width: "100%",
-        height: 166,
+        height: 192,
         overflow: "hidden",
         opacity,
       }}
