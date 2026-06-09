@@ -318,7 +318,7 @@ export const ReviewsScene: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingTop: 68,
+          justifyContent: "center",
         }}
       >
         <div
