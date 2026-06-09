@@ -121,7 +121,7 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
         overflow: "hidden",
         width: textClipWidth,
         opacity: textOpacity,
-        marginLeft: iconX + 3,
+        marginLeft: iconX + 5,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
