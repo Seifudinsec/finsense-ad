@@ -1,0 +1,156 @@
+import {
+  AbsoluteFill,
+  interpolate,
+  useCurrentFrame,
+  Easing,
+} from "remotion";
+import { loadFont } from "@remotion/google-fonts/Inter";
+
+const { fontFamily } = loadFont("normal", {
+  weights: ["400", "500", "700", "900"],
+  subsets: ["latin"],
+});
+
+const RED = "#ea384c";
+const DARK_RED = "#DE1117";
+const LIGHT_RED = "#f87171";
+const BG = "#080808";
+
+const FEATURES = [
+  { icon: "📦", text: "Kubernetes & Red Hat Solutions", delay: 32 },
+  { icon: "⚡", text: "Automated CI/CD Pipelines",       delay: 42 },
+  { icon: "🔒", text: "VAPT & Security Audits",          delay: 52 },
+];
+
+export const CreditScene: React.FC = () => {
+  const frame = useCurrentFrame();
+
+  /* Icon */
+  const iconScale = interpolate(frame, [0, 22], [0, 1], {
+    easing: Easing.bezier(0.34, 1.56, 0.64, 1),
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+
+  /* Headline */
+  const headlineOpacity = interpolate(frame, [14, 32], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const headlineY = interpolate(frame, [14, 32], [40, 0], {
+    easing: Easing.bezier(0.16, 1, 0.3, 1),
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+
+  /* Trust badge */
+  const badgeScale = animateBadge(frame);
+
+  function animateBadge(f: number) {
+    return interpolate(f, [70, 82], [0, 1], {
+      easing: Easing.bezier(0.34, 1.56, 0.64, 1),
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    });
+  }
+
+  return (
+    <AbsoluteFill style={{ background: BG, overflow: "hidden", fontFamily }}>
+
+      {/* Bottom-left red glow */}
+      <div style={{
+        position: "absolute", bottom: -140, left: -140,
+        width: 560, height: 560, borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(234, 56, 76, 0.08) 0%, transparent 68%)`,
+      }} />
+
+      {/* Right accent stripe */}
+      <div style={{
+        position: "absolute", right: 0, top: "15%",
+        width: 5, height: "70%", borderRadius: 3,
+        background: `linear-gradient(180deg, transparent, ${RED}, transparent)`,
+        opacity: headlineOpacity,
+      }} />
+
+      <AbsoluteFill style={{
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        padding: "0 90px",
+      }}>
+
+        {/* ☁️ icon */}
+        <div style={{
+          transform: `scale(${iconScale})`,
+          fontSize: 72,
+          marginBottom: 20,
+          filter: `drop-shadow(0 0 18px rgba(234, 56, 76, 0.35))`,
+        }}>
+          ☁️
+        </div>
+
+        {/* Product label */}
+        <div style={{
+          opacity: headlineOpacity,
+          fontWeight: 600, fontSize: 13, color: RED,
+          letterSpacing: 5, textTransform: "uppercase", marginBottom: 12,
+        }}>
+          Infrastructure & SecOps
+        </div>
+
+        {/* Headline */}
+        <div style={{
+          transform: `translateY(${headlineY}px)`, opacity: headlineOpacity,
+          fontWeight: 900, fontSize: 64, color: "white",
+          letterSpacing: -2, textAlign: "center", lineHeight: 1.05, marginBottom: 36,
+        }}>
+          DevOps &<br />
+          <span style={{ color: RED }}>Cloud Systems</span>
+        </div>
+
+        {/* Feature cards */}
+        <div style={{
+          display: "flex", flexDirection: "column",
+          gap: 14, marginBottom: 38, width: "100%", maxWidth: 500,
+        }}>
+          {FEATURES.map((f, i) => {
+            const fOpacity = interpolate(frame, [f.delay, f.delay + 14], [0, 1], {
+              extrapolateLeft: "clamp", extrapolateRight: "clamp",
+            });
+            const fX = interpolate(frame, [f.delay, f.delay + 18], [-28, 0], {
+              easing: Easing.bezier(0.16, 1, 0.3, 1),
+              extrapolateLeft: "clamp", extrapolateRight: "clamp",
+            });
+            return (
+              <div key={i} style={{
+                opacity: fOpacity,
+                transform: `translateX(${fX}px)`,
+                display: "flex", alignItems: "center", gap: 14,
+                background: "rgba(255,255,255,0.035)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: 14, padding: "14px 20px",
+              }}>
+                <span style={{ fontSize: 26 }}>{f.icon}</span>
+                <span style={{ fontSize: 18, fontWeight: 500, color: "rgba(255,255,255,0.85)" }}>
+                  {f.text}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Trust badge */}
+        <div style={{
+          transform: `scale(${badgeScale})`,
+          opacity: badgeScale,
+          display: "flex", alignItems: "center", gap: 10,
+          background: "rgba(234, 56, 76, 0.08)",
+          border: `1px solid ${RED}`,
+          borderRadius: 100, padding: "13px 30px",
+        }}>
+          <span style={{ fontSize: 22, color: RED }}>✓</span>
+          <span style={{ fontSize: 17, fontWeight: 700, color: LIGHT_RED, letterSpacing: 0.5 }}>
+            Trusted by KCB Bank, DTB & NCBA
+          </span>
+        </div>
+
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
