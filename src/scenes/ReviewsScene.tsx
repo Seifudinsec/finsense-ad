@@ -189,7 +189,7 @@ const MarqueeRow: React.FC<{
   opacity: number;
 }> = ({ direction, offset, opacity }) => {
   const frame = useCurrentFrame();
-  const distance = interpolate(frame + offset, [0, 900], [0, ROW_SPAN], {
+  const distance = interpolate(frame + offset, [0, 1500], [0, ROW_SPAN], {
     extrapolateLeft: "extend",
     extrapolateRight: "extend",
   });
