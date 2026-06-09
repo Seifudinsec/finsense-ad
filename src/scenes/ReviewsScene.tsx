@@ -26,8 +26,8 @@ const { fontFamily } = loadFont("normal", {
 const RED = "#ea384c";
 const LIGHT_RED = "#f87171";
 const BG = "#080808";
-const CARD_W = 444;
-const CARD_GAP = 22;
+const CARD_W = 520;
+const CARD_GAP = 36;
 const ROW_SPAN = (CARD_W + CARD_GAP) * 6;
 
 const TESTIMONIALS = [
@@ -85,7 +85,9 @@ const TRUST_LOGOS = [
   { src: dibLogo, label: "Dubai Islamic Bank" },
 ];
 
-const STAR_FIELD = Array.from({ length: 42 }, (_, i) => ({
+const TESTIMONIAL_LOOP = [...TESTIMONIALS, ...TESTIMONIALS];
+
+const STAR_FIELD = Array.from({ length: 30 }, (_, i) => ({
   x: (i * 131.7) % 100,
   y: (i * 71.3) % 100,
   size: 1 + (i % 3),
@@ -103,21 +105,21 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
     <div
       style={{
         flex: `0 0 ${CARD_W}px`,
-        height: 138,
+        height: 154,
         display: "flex",
-        gap: 18,
-        padding: "20px 22px",
+        gap: 20,
+        padding: "24px 28px",
         background:
           "linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025))",
         border: "1px solid rgba(255,255,255,0.11)",
         borderRadius: 18,
-        boxShadow: "0 18px 45px rgba(0,0,0,0.28)",
+        boxShadow: "0 12px 28px rgba(0,0,0,0.2)",
       }}
     >
       <div
         style={{
-          width: 54,
-          height: 54,
+          width: 66,
+          height: 66,
           borderRadius: 999,
           background: "rgba(255,255,255,0.94)",
           border: "1px solid rgba(255,255,255,0.2)",
@@ -131,8 +133,8 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
         <Img
           src={logo}
           style={{
-            maxWidth: 44,
-            maxHeight: 32,
+            maxWidth: 54,
+            maxHeight: 40,
             objectFit: "contain",
           }}
         />
@@ -141,11 +143,11 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
       <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
         <div
           style={{
-            fontSize: 17,
-            lineHeight: 1.35,
+            fontSize: 19,
+            lineHeight: 1.38,
             color: "rgba(255,255,255,0.76)",
             fontWeight: 400,
-            height: 70,
+            height: 84,
             overflow: "hidden",
           }}
         >
@@ -154,7 +156,7 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
         <div
           style={{
             color: LIGHT_RED,
-            fontSize: 15,
+            fontSize: 17,
             fontWeight: 800,
             marginTop: 8,
           }}
@@ -164,7 +166,7 @@ const TestimonialCard: React.FC<(typeof TESTIMONIALS)[number]> = ({
         <div
           style={{
             color: "rgba(255,255,255,0.42)",
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 600,
             textTransform: "uppercase",
             letterSpacing: 1.2,
@@ -187,7 +189,7 @@ const MarqueeRow: React.FC<{
   opacity: number;
 }> = ({ direction, offset, opacity }) => {
   const frame = useCurrentFrame();
-  const distance = interpolate(frame + offset, [0, 180], [0, ROW_SPAN], {
+  const distance = interpolate(frame + offset, [0, 540], [0, ROW_SPAN], {
     extrapolateLeft: "extend",
     extrapolateRight: "extend",
   });
@@ -199,28 +201,47 @@ const MarqueeRow: React.FC<{
   return (
     <div
       style={{
+        position: "relative",
         width: "100%",
-        height: 152,
+        height: 166,
         overflow: "hidden",
         opacity,
-        WebkitMaskImage:
-          "linear-gradient(90deg, transparent 0%, black 13%, black 87%, transparent 100%)",
-        maskImage:
-          "linear-gradient(90deg, transparent 0%, black 13%, black 87%, transparent 100%)",
       }}
     >
       <div
         style={{
           display: "flex",
           gap: CARD_GAP,
-          transform: `translateX(${shift}px)`,
+          transform: `translate3d(${shift}px, 0, 0)`,
           willChange: "transform",
         }}
       >
-        {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+        {TESTIMONIAL_LOOP.map((t, i) => (
           <TestimonialCard key={`${direction}-${i}`} {...t} />
         ))}
       </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: 150,
+          background: "linear-gradient(90deg, #080808 0%, rgba(8,8,8,0) 100%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: 150,
+          background: "linear-gradient(270deg, #080808 0%, rgba(8,8,8,0) 100%)",
+          pointerEvents: "none",
+        }}
+      />
     </div>
   );
 };
@@ -242,11 +263,11 @@ export const ReviewsScene: React.FC = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const logoBandOpacity = interpolate(frame, [34, 48], [0, 1], {
+  const logoBandOpacity = interpolate(frame, [56, 74], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const logoBandY = interpolate(frame, [34, 48], [24, 0], {
+  const logoBandY = interpolate(frame, [56, 74], [24, 0], {
     easing: Easing.bezier(0.16, 1, 0.3, 1),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -254,7 +275,7 @@ export const ReviewsScene: React.FC = () => {
   const partnerSpring = spring({
     frame,
     fps,
-    delay: 50,
+    delay: 84,
     config: { damping: 15, mass: 0.7, stiffness: 80 },
   });
 
@@ -287,7 +308,6 @@ export const ReviewsScene: React.FC = () => {
               borderRadius: 999,
               background: star.color,
               opacity,
-              boxShadow: `0 0 8px ${star.color}`,
             }}
           />
         );
@@ -298,7 +318,7 @@ export const ReviewsScene: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingTop: 58,
+          paddingTop: 68,
         }}
       >
         <div
@@ -306,7 +326,7 @@ export const ReviewsScene: React.FC = () => {
             transform: `translateY(${titleY}px)`,
             opacity: titleOpacity,
             width: "100%",
-            maxWidth: 900,
+            maxWidth: 960,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -319,12 +339,12 @@ export const ReviewsScene: React.FC = () => {
               alignItems: "center",
               gap: 14,
               color: "white",
-              fontSize: 36,
+              fontSize: 34,
               fontWeight: 900,
             }}
           >
             <span style={{ color: RED, fontSize: 48, lineHeight: 1 }}>›</span>
-            What Our Clients Say
+            Trusted by top industry leaders
           </div>
           <div
             style={{
@@ -334,7 +354,7 @@ export const ReviewsScene: React.FC = () => {
               letterSpacing: 0.2,
             }}
           >
-            Trusted outcomes
+            Proven outcomes
           </div>
         </div>
 
@@ -348,11 +368,11 @@ export const ReviewsScene: React.FC = () => {
             transform: `translateY(${logoBandY}px)`,
             opacity: logoBandOpacity,
             width: 960,
-            marginTop: 30,
+            marginTop: 38,
             padding: "18px 34px 22px",
             borderRadius: 18,
             background: "rgba(255,255,255,0.94)",
-            boxShadow: "0 24px 60px rgba(0,0,0,0.28)",
+            boxShadow: "0 18px 42px rgba(0,0,0,0.22)",
           }}
         >
           <div
@@ -402,13 +422,13 @@ export const ReviewsScene: React.FC = () => {
             justifyContent: "space-between",
             gap: 28,
             width: 820,
-            marginTop: 26,
+            marginTop: 36,
             padding: "22px 34px",
             borderRadius: 20,
             background:
               "linear-gradient(135deg, rgba(234,56,76,0.16), rgba(255,255,255,0.055))",
             border: "1px solid rgba(234,56,76,0.3)",
-            boxShadow: "0 24px 70px rgba(234,56,76,0.12)",
+            boxShadow: "0 18px 44px rgba(234,56,76,0.1)",
           }}
         >
           <div>

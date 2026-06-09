@@ -9,14 +9,18 @@ import { AnalyticsScene } from "./scenes/AnalyticsScene";
 import { ReviewsScene } from "./scenes/ReviewsScene";
 import { CTAScene } from "./scenes/CTAScene";
 
-const T = 24; // transition duration in frames
+const T = 18; // transition duration in frames
+const INTRO = 135;
+const PRODUCT = 120;
+const REVIEWS = 150;
+const CTA = 135;
  
 export const FinsenseAd: React.FC = () => {
   return (
     <AbsoluteFill>
       <TransitionSeries>
         {/* Scene 1 — Brand Intro */}
-        <TransitionSeries.Sequence durationInFrames={120}>
+        <TransitionSeries.Sequence durationInFrames={INTRO}>
           <IntroScene />
         </TransitionSeries.Sequence>
  
@@ -26,7 +30,7 @@ export const FinsenseAd: React.FC = () => {
         />
  
         {/* Scene 2 — Core Banking & APIs */}
-        <TransitionSeries.Sequence durationInFrames={90}>
+        <TransitionSeries.Sequence durationInFrames={PRODUCT}>
           <PaymentsScene />
         </TransitionSeries.Sequence>
  
@@ -36,7 +40,7 @@ export const FinsenseAd: React.FC = () => {
         />
  
         {/* Scene 3 — DevOps & Cloud */}
-        <TransitionSeries.Sequence durationInFrames={90}>
+        <TransitionSeries.Sequence durationInFrames={PRODUCT}>
           <CreditScene />
         </TransitionSeries.Sequence>
  
@@ -46,7 +50,7 @@ export const FinsenseAd: React.FC = () => {
         />
  
         {/* Scene 4 — Proven Impact */}
-        <TransitionSeries.Sequence durationInFrames={90}>
+        <TransitionSeries.Sequence durationInFrames={PRODUCT}>
           <AnalyticsScene />
         </TransitionSeries.Sequence>
  
@@ -56,7 +60,7 @@ export const FinsenseAd: React.FC = () => {
         />
  
         {/* Scene 5 — Customer Reviews & Partners */}
-        <TransitionSeries.Sequence durationInFrames={90}>
+        <TransitionSeries.Sequence durationInFrames={REVIEWS}>
           <ReviewsScene />
         </TransitionSeries.Sequence>
  
@@ -66,7 +70,7 @@ export const FinsenseAd: React.FC = () => {
         />
  
         {/* Scene 6 — CTA */}
-        <TransitionSeries.Sequence durationInFrames={120}>
+        <TransitionSeries.Sequence durationInFrames={CTA}>
           <CTAScene />
         </TransitionSeries.Sequence>
       </TransitionSeries>
