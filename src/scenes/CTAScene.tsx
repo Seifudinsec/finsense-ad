@@ -33,12 +33,15 @@ export const CTAScene: React.FC = () => {
   const pillsFrom = Math.round(2.8 * fps);
 
   function entrance(fromFrame: number) {
-    const progress = interpolate(frame, [fromFrame, fromFrame + 12], [0, 1], {
+    const progressRaw = interpolate(frame, [fromFrame, fromFrame + 12], [0, 1], {
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp",
       easing: Easing.bezier(0.16, 1, 0.3, 1),
     });
-    const y = interpolate(progress, [0, 1], [20, 0]);
+    // round progress for opacity stability and compute a rounded y for translate
+    const progress = Math.round(progressRaw * 1000) / 1000;
+    const yRaw = interpolate(progressRaw, [0, 1], [20, 0]);
+    const y = Math.round(yRaw * 10) / 10; // 0.1px precision
     return { progress, y };
   }
 
@@ -93,23 +96,25 @@ export const CTAScene: React.FC = () => {
 
 
         {/* ── Animated logo above headline (moved down) ── */}
-        <div style={{ opacity: logoEntrance.progress, transform: `translateY(${logoEntrance.y}px) scale(${logoScale})`, marginBottom: 12, willChange: "transform, opacity" }}>
+        <div style={{ opacity: logoEntrance.progress, transform: `translate3d(0, ${logoEntrance.y}px, 0) scale(${logoScale})`, marginBottom: 12, willChange: "transform, opacity", transformOrigin: "center center" }}>
           <AnimatedLogo scale={0.9} animate={false} startFrame={0} />
         </div>
 
         {/* ── "Ready to co-create your future?" ── */}
         <div style={{ textAlign: "center", marginBottom: 16 }}>
           <div style={{
-            transform: `translateY(${taglineEntrance.y}px)`,
+          transform: `translate3d(0, ${taglineEntrance.y}px, 0)`,
             opacity: taglineEntrance.progress,
-            fontWeight: 300, fontSize: 22,
-            color: "rgba(255,255,255,0.52)", letterSpacing: 1, marginBottom: 6,
+          willChange: "transform, opacity",
+          fontWeight: 300, fontSize: 22,
+          color: "rgba(255,255,255,0.52)", letterSpacing: 1, marginBottom: 6,
           }}>
             Built for Fintechs, Banks, SACCOs, and Telcos That Refuse to Compromise
           </div>
           <div style={{
-            transform: `translateY(${headlineEntrance.y}px)`,
+            transform: `translate3d(0, ${headlineEntrance.y}px, 0)`,
             opacity: headlineEntrance.progress,
+            willChange: "transform, opacity",
             fontWeight: 900, fontSize: 64, color: "white",
             letterSpacing: -2.5, lineHeight: 1.1,
             textShadow: `0 0 60px rgba(234, 56, 76, 0.22)`,
@@ -121,7 +126,8 @@ export const CTAScene: React.FC = () => {
         {/* ── Services line ── */}
         <div style={{
           opacity: servicesEntrance.progress,
-          transform: `translateY(${servicesEntrance.y}px)`,
+          transform: `translate3d(0, ${servicesEntrance.y}px, 0)`,
+          willChange: "transform, opacity",
           fontSize: 16, color: "rgba(255,255,255,0.48)",
           textAlign: "center", marginTop: 12, marginBottom: 36,
           letterSpacing: 1.5,
@@ -133,7 +139,9 @@ export const CTAScene: React.FC = () => {
         {/* ── CTA button ── */}
         <div style={{
           opacity: ctaEntrance.progress,
-          transform: `translateY(${ctaEntrance.y}px)`,
+          transform: `translate3d(0, ${ctaEntrance.y}px, 0)`,
+          willChange: "transform, opacity",
+          transformOrigin: "center center",
           background: RED,
           borderRadius: 100, padding: "17px 54px",
           fontSize: 20, fontWeight: 700, color: "white",
@@ -164,7 +172,8 @@ export const CTAScene: React.FC = () => {
         {/* ── Contact details ── */}
         <div style={{
           opacity: detailsEntrance.progress,
-          transform: `translateY(${detailsEntrance.y}px)`,
+          transform: `translate3d(0, ${detailsEntrance.y}px, 0)`,
+          willChange: "transform, opacity",
           display: "flex", flexDirection: "column",
           alignItems: "center", gap: 5,
           fontSize: 15, color: "rgba(255,255,255,0.52)",
@@ -187,7 +196,8 @@ export const CTAScene: React.FC = () => {
         {/* ── Sector pills ── */}
         <div style={{
           opacity: pillsEntrance.progress,
-          transform: `translateY(${pillsEntrance.y}px)`,
+          transform: `translate3d(0, ${pillsEntrance.y}px, 0)`,
+          willChange: "transform, opacity",
           display: "flex", gap: 10,
         }}>
           {["Banks", "Fintechs", "SACCOs", "Telcos"].map((p) => (
@@ -220,10 +230,12 @@ export const CTAScene: React.FC = () => {
             const socialStart = 92; // shortly after details reveal
             const delay = i * 6;
             const opacity = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-            const y = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [12, 0], { easing: Easing.bezier(0.16, 1, 0.3, 1), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-            const scale = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [0.9, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const yRaw = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [12, 0], { easing: Easing.bezier(0.16, 1, 0.3, 1), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const y = Math.round(yRaw * 10) / 10;
+            const scaleRaw = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [0.9, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const scale = Math.round(scaleRaw * 1000) / 1000;
             return (
-              <div key={i} style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)", opacity, transform: `translateY(${y}px) scale(${scale})`, transition: "none" }}>
+              <div key={i} style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)", opacity, transform: `translate3d(0, ${y}px, 0) scale(${scale})`, willChange: "transform, opacity", transition: "none" }}>
                 {s.component}
               </div>
             );
