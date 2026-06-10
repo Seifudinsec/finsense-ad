@@ -13,7 +13,7 @@ const T = 18; // transition duration in frames
 const INTRO = 135;
 const PRODUCT = 120;
 const REVIEWS = 150;
-const CTA = 135;
+const CTA = 240;
  
 export const FinsenseAd: React.FC = () => {
   return (
