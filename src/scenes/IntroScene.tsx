@@ -111,11 +111,10 @@ export const IntroScene: React.FC = () => {
           fontWeight: 400, fontSize: 18,
           color: "rgba(255,255,255,0.55)",
           letterSpacing: 5,
-          textTransform: "uppercase",
           textAlign: "center",
           marginTop: 24,
         }}>
-          Simplifying Complex Transformations
+          Simplifying Digital Transformation for African Businesses
         </div>
 
       </AbsoluteFill>
