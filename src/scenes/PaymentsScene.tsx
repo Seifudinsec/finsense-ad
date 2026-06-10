@@ -166,8 +166,8 @@ export const PaymentsScene: React.FC = () => {
           fontWeight: 900, fontSize: 64, color: "white",
           letterSpacing: -2, textAlign: "center", lineHeight: 1.05, marginBottom: 20,
         }}>
-          Core Banking & <br />
-          <span style={{ color: RED }}>API Integration</span>
+          Your Core Systems <br />
+          <span style={{ color: RED }}>Connected</span>
         </div>
 
         {/* Subtitle */}
@@ -176,7 +176,7 @@ export const PaymentsScene: React.FC = () => {
           fontSize: 20, color: "rgba(255,255,255,0.6)",
           textAlign: "center", lineHeight: 1.55, marginBottom: 32, maxWidth: 680,
         }}>
-          Modernizing core financial systems and connecting digital platforms.
+          Powered by robust API integration, core banking modernization, and custom middleware.
         </div>
 
         {/* Tech stack row */}
