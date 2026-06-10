@@ -50,14 +50,8 @@ export const CTAScene: React.FC = () => {
   const detailsEntrance = entrance(contactFrom);
   const pillsEntrance = entrance(pillsFrom);
 
-  // ── Subtle logo pulse after it lands (f ~62 onward) ───────────
-  const pulse = interpolate(
-    Math.sin((frame - 62) * 0.08),
-    [-1, 1], [0.98, 1.03], {
-      extrapolateLeft: "clamp", extrapolateRight: "clamp",
-    }
-  );
-  const logoScale = frame < 62 ? 1 : pulse;
+  // ── Stable logo scale (no sinusoidal pulse to avoid micro-jitter)
+  const logoScale = 1;
 
   // ── URL typewriter (f 66 → 84) ──────────────────────────────────────────
   const urlChars = Math.floor(
@@ -99,8 +93,8 @@ export const CTAScene: React.FC = () => {
 
 
         {/* ── Animated logo above headline (moved down) ── */}
-        <div style={{ opacity: logoEntrance.progress, transform: `translateY(${logoEntrance.y}px) scale(${logoScale})`, marginBottom: 12 }}>
-          <AnimatedLogo scale={0.9} animate startFrame={0} />
+        <div style={{ opacity: logoEntrance.progress, transform: `translateY(${logoEntrance.y}px) scale(${logoScale})`, marginBottom: 12, willChange: "transform, opacity" }}>
+          <AnimatedLogo scale={0.9} animate={false} startFrame={0} />
         </div>
 
         {/* ── "Ready to co-create your future?" ── */}
