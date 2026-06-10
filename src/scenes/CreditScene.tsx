@@ -61,28 +61,27 @@ export const CreditScene: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: BG, overflow: "hidden", fontFamily }}>
 
-      {/* Top banner */}
+      {/* Compact badge near Proven outcomes (right-aligned) */}
       <div style={{
         position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 100,
-        background: "#0a0a0a",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        top: 32,
+        right: 48,
+        background: "transparent",
+        padding: "6px 12px",
+        borderRadius: 6,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-end",
         justifyContent: "center",
         zIndex: 20,
         opacity: bannerOpacity,
         willChange: "opacity",
         pointerEvents: "none",
       }}>
-        <div style={{ fontSize: 20, fontWeight: 600, color: RED, letterSpacing: 4, textTransform: "uppercase", marginBottom: 4 }}>
+        <div style={{ fontSize: 16, fontWeight: 600, color: RED, letterSpacing: 3, textTransform: "uppercase", marginBottom: 4, textAlign: "right" }}>
           SERVICES THAT DIGITIZE YOUR BUSINESS
         </div>
-        <div style={{ fontSize: 24, fontWeight: 700, color: "white", letterSpacing: -0.5, marginBottom: 6 }}>
+        <div style={{ fontSize: 24, fontWeight: 700, color: "white", letterSpacing: -0.5, marginBottom: 6, textAlign: "right" }}>
           2 of 2
         </div>
         <div style={{ display: "flex", gap: 8 }}>
