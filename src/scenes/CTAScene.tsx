@@ -207,14 +207,12 @@ export const CTAScene: React.FC = () => {
           ))}
         </div>
 
-        {/* Social icons row (bottom) */}
+        {/* Social icons row (inline under content) */}
         <div style={{
-          position: "absolute",
-          bottom: 36,
-          left: "50%",
-          transform: "translateX(-50%)",
           display: "flex",
+          justifyContent: "center",
           gap: 18,
+          marginTop: 12,
           zIndex: 4,
         }}>
           <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
