@@ -207,26 +207,31 @@ export const CTAScene: React.FC = () => {
           ))}
         </div>
 
-        {/* Social icons row (inline under content) */}
+        {/* Social icons row (inline under content) - animated entrance */}
         <div style={{
           display: "flex",
           justifyContent: "center",
           gap: 18,
-          marginTop: 12,
+          marginTop: 8,
           zIndex: 4,
         }}>
-          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
-            <FacebookIcon size={20} color="rgba(255,255,255,0.75)" />
-          </div>
-          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
-            <TwitterIcon size={20} color="rgba(255,255,255,0.75)" />
-          </div>
-          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
-            <InstagramIcon size={20} color="rgba(255,255,255,0.75)" />
-          </div>
-          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
-            <LinkedInIcon size={20} color="rgba(255,255,255,0.75)" />
-          </div>
+          {[
+            { component: <FacebookIcon size={20} color="rgba(255,255,255,0.85)" /> },
+            { component: <TwitterIcon size={20} color="rgba(255,255,255,0.85)" /> },
+            { component: <InstagramIcon size={20} color="rgba(255,255,255,0.85)" /> },
+            { component: <LinkedInIcon size={20} color="rgba(255,255,255,0.85)" /> },
+          ].map((s, i) => {
+            const socialStart = 92; // shortly after details reveal
+            const delay = i * 6;
+            const opacity = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const y = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [12, 0], { easing: Easing.bezier(0.16, 1, 0.3, 1), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const scale = interpolate(frame, [socialStart + delay, socialStart + delay + 12], [0.9, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            return (
+              <div key={i} style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)", opacity, transform: `translateY(${y}px) scale(${scale})`, transition: "none" }}>
+                {s.component}
+              </div>
+            );
+          })}
         </div>
 
       </AbsoluteFill>

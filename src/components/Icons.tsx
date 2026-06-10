@@ -35,7 +35,8 @@ export const LockIcon: React.FC<IconProps> = ({ size = 22, color = "currentColor
 
 export const CloudIcon: React.FC<IconProps> = ({ size = 72, color = "currentColor", style, className }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} className={className} xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 17.5A4.5 4.5 0 0016 9h-1.26A6.5 6.5 0 104 17.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    {/* Filled, rounded cloud for clearer silhouette */}
+    <path d="M19.36 10.04A6.5 6.5 0 0012 4a6.5 6.5 0 00-7.36 6.04A4.5 4.5 0 004 20.5h13a4.5 4.5 0 002.36-8.46z" fill={color} />
   </svg>
 );
 
