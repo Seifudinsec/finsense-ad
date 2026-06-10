@@ -5,6 +5,7 @@ import {
   Easing,
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Inter";
+import { LinkIcon, CheckIcon } from "../components/Icons";
 
 const { fontFamily } = loadFont("normal", {
   weights: ["400", "600", "700", "900"],
@@ -91,12 +92,15 @@ export const PaymentsScene: React.FC = () => {
         padding: "0 90px",
       }}>
 
-        {/* 🔗 icon */}
+        {/* Link icon */}
         <div style={{
           transform: `scale(${iconScale})`,
-          fontSize: 76, marginBottom: 20,
+          width: 76, height: 76, marginBottom: 20,
           filter: `drop-shadow(0 0 18px rgba(234, 56, 76, 0.35))`,
-        }}>🔗</div>
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <LinkIcon size={76} color={RED} />
+        </div>
 
         {/* Product label */}
         <div style={{
@@ -168,7 +172,10 @@ export const PaymentsScene: React.FC = () => {
           borderRadius: 100, padding: "11px 28px",
           fontSize: 15, color: LIGHT_RED, fontWeight: 600, letterSpacing: 0.5,
         }}>
-          ✓ Bank-grade middleware & integrations
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+            <CheckIcon size={18} color={RED} />
+            <span>Bank-grade middleware & integrations</span>
+          </span>
         </div>
 
       </AbsoluteFill>

@@ -6,6 +6,7 @@ import {
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Inter";
 import { AnimatedLogo } from "../components/AnimatedLogo";
+import { GlobeIcon, MailIcon, PhoneIcon, MapPinIcon } from "../components/Icons";
 
 const { fontFamily } = loadFont("normal", {
   weights: ["300", "400", "700", "900"],
@@ -158,8 +159,12 @@ export const CTAScene: React.FC = () => {
           fontSize: 18, color: LIGHT_RED,
           fontWeight: 600, letterSpacing: 1,
           marginBottom: 20,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
         }}>
-          🌐 {URL_TEXT.slice(0, urlChars)}
+          <GlobeIcon size={18} color={LIGHT_RED} />
+          <span>{URL_TEXT.slice(0, urlChars)}</span>
           {cursorVisible && (
             <span style={{ color: "white", fontWeight: 300 }}>|</span>
           )}
@@ -173,10 +178,17 @@ export const CTAScene: React.FC = () => {
           fontSize: 15, color: "rgba(255,255,255,0.52)",
           fontWeight: 500, letterSpacing: 0.5, marginBottom: 28,
         }}>
-          <div>📧 sales@finsense.co.ke</div>
-          <div>📞 +254 756 444 444</div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.38)" }}>
-            📍 Westside Towers, Westlands, Nairobi
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <MailIcon size={16} color={"rgba(255,255,255,0.52)"} />
+            <span>sales@finsense.co.ke</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <PhoneIcon size={16} color={"rgba(255,255,255,0.52)"} />
+            <span>+254 756 444 444</span>
+          </div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.38)", display: "flex", alignItems: "center", gap: 8 }}>
+            <MapPinIcon size={14} color={"rgba(255,255,255,0.38)"} />
+            <span>Westside Towers, Westlands, Nairobi</span>
           </div>
         </div>
 

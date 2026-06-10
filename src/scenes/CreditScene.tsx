@@ -5,6 +5,7 @@ import {
   Easing,
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Inter";
+import { BoxIcon, BoltIcon, LockIcon, CloudIcon, CheckIcon } from "../components/Icons";
 
 const { fontFamily } = loadFont("normal", {
   weights: ["400", "500", "700", "900"],
@@ -17,9 +18,9 @@ const LIGHT_RED = "#f87171";
 const BG = "#080808";
 
 const FEATURES = [
-  { icon: "📦", text: "Kubernetes & Red Hat Solutions", delay: 32 },
-  { icon: "⚡", text: "Automated CI/CD Pipelines",       delay: 42 },
-  { icon: "🔒", text: "VAPT & Security Audits",          delay: 52 },
+  { icon: <BoxIcon size={26} color={RED} />,  text: "Kubernetes & Red Hat Solutions", delay: 32 },
+  { icon: <BoltIcon size={26} color={RED} />, text: "Automated CI/CD Pipelines",       delay: 42 },
+  { icon: <LockIcon size={26} color={RED} />, text: "VAPT & Security Audits",          delay: 52 },
 ];
 
 export const CreditScene: React.FC = () => {
@@ -75,14 +76,18 @@ export const CreditScene: React.FC = () => {
         padding: "0 90px",
       }}>
 
-        {/* ☁️ icon */}
+        {/* Cloud icon */}
         <div style={{
           transform: `scale(${iconScale})`,
-          fontSize: 72,
+          width: 72,
+          height: 72,
           marginBottom: 20,
           filter: `drop-shadow(0 0 18px rgba(234, 56, 76, 0.35))`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}>
-          ☁️
+          <CloudIcon size={72} color={RED} />
         </div>
 
         {/* Product label */}
@@ -144,7 +149,7 @@ export const CreditScene: React.FC = () => {
           border: `1px solid ${RED}`,
           borderRadius: 100, padding: "13px 30px",
         }}>
-          <span style={{ fontSize: 22, color: RED }}>✓</span>
+          <span style={{ fontSize: 22, color: RED }}><CheckIcon size={22} color={RED} /></span>
           <span style={{ fontSize: 17, fontWeight: 700, color: LIGHT_RED, letterSpacing: 0.5 }}>
             Trusted by KCB Bank, DTB & NCBA
           </span>
