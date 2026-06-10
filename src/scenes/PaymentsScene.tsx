@@ -77,32 +77,41 @@ export const PaymentsScene: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: BG, overflow: "hidden", fontFamily }}>
 
-      {/* Compact badge near Proven outcomes (right-aligned) */}
+      {/* Left-aligned chevron + heading (match photo) */}
       <div style={{
         position: "absolute",
-        top: 32,
-        right: 48,
-        background: "transparent",
-        padding: "6px 12px",
-        borderRadius: 6,
+        top: 28,
+        left: 48,
         display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-end",
-        justifyContent: "center",
+        alignItems: "center",
+        gap: 14,
         zIndex: 20,
         opacity: bannerOpacity,
         willChange: "opacity",
         pointerEvents: "none",
       }}>
-        <div style={{ fontSize: 16, fontWeight: 600, color: RED, letterSpacing: 3, textTransform: "uppercase", marginBottom: 4, textAlign: "right" }}>
+        {/* red chevron */}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <path d="M7 4L17 12L7 20" stroke={RED} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+
+        <div style={{ fontSize: 34, fontWeight: 800, color: "white", letterSpacing: -0.5 }}>
           SERVICES THAT DIGITIZE YOUR BUSINESS
         </div>
-        <div style={{ fontSize: 24, fontWeight: 700, color: "white", letterSpacing: -0.5, marginBottom: 6, textAlign: "right" }}>
+      </div>
+
+      {/* Small right-aligned scene label (where "Proven outcomes" was) */}
+      <div style={{
+        position: "absolute",
+        top: 32,
+        right: 48,
+        zIndex: 20,
+        opacity: bannerOpacity,
+        willChange: "opacity",
+        pointerEvents: "none",
+      }}>
+        <div style={{ fontSize: 16, fontWeight: 700, color: RED, letterSpacing: 0.5 }}>
           1 of 2
-        </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <span style={{ color: RED, fontSize: 12 }}>●</span>
-          <span style={{ color: "#333", fontSize: 12 }}>○</span>
         </div>
       </div>
 
