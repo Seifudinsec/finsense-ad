@@ -26,6 +26,16 @@ export const PaymentsScene: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
+  const titleOpacity = interpolate(frame, [0, 15], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const titleY = interpolate(frame, [0, 15], [-18, 0], {
+    easing: Easing.bezier(0.16, 1, 0.3, 1),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   /* Icon */
   const iconScale = interpolate(frame, [0, 20], [0, 1], {
     easing: Easing.bezier(0.34, 1.56, 0.64, 1),
@@ -77,43 +87,6 @@ export const PaymentsScene: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: BG, overflow: "hidden", fontFamily }}>
 
-      {/* Left-aligned chevron + heading (match photo) */}
-      <div style={{
-        position: "absolute",
-        top: 28,
-        left: 48,
-        display: "flex",
-        alignItems: "center",
-        gap: 14,
-        zIndex: 20,
-        opacity: bannerOpacity,
-        willChange: "opacity",
-        pointerEvents: "none",
-      }}>
-        {/* red chevron */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-          <path d="M7 4L17 12L7 20" stroke={RED} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-
-        <div style={{ fontSize: 34, fontWeight: 800, color: "white", letterSpacing: -0.5 }}>
-          SERVICES THAT DIGITIZE YOUR BUSINESS
-        </div>
-      </div>
-
-      {/* Small right-aligned scene label (where "Proven outcomes" was) */}
-      <div style={{
-        position: "absolute",
-        top: 32,
-        right: 48,
-        zIndex: 20,
-        opacity: bannerOpacity,
-        willChange: "opacity",
-        pointerEvents: "none",
-      }}>
-        <div style={{ fontSize: 16, fontWeight: 700, color: RED, letterSpacing: 0.5 }}>
-          1 of 2
-        </div>
-      </div>
 
       {/* Top-right ambient glow */}
       <div style={{
@@ -135,6 +108,38 @@ export const PaymentsScene: React.FC = () => {
         alignItems: "center", justifyContent: "center",
         paddingLeft: 48, paddingRight: 48, width: "100%", boxSizing: "border-box",
       }}>
+
+        {/* Section header (matches ReviewsScene placement) */}
+        <div style={{
+          transform: `translateY(${titleY}px)`,
+          opacity: titleOpacity,
+          width: "100%",
+          maxWidth: 960,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 28,
+        }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 14,
+            color: "white",
+            fontSize: 34,
+            fontWeight: 900,
+          }}>
+            <span style={{ color: RED, fontSize: 48, lineHeight: 1 }}>›</span>
+            SERVICES THAT DIGITIZE YOUR BUSINESS
+          </div>
+          <div style={{
+            color: LIGHT_RED,
+            fontSize: 18,
+            fontWeight: 800,
+            letterSpacing: 0.2,
+          }}>
+            1 of 2
+          </div>
+        </div>
 
         {/* Link icon */}
         <div style={{
