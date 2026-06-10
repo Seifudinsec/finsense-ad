@@ -103,42 +103,80 @@ export const AnalyticsScene: React.FC = () => {
         </div>
 
         {/* Bar chart representing deployments/integrations */}
-        <div style={{
-          display: "flex", alignItems: "flex-end", justifyContent: "center",
-          gap: 12, height: 190, marginBottom: 18,
-          width: "100%", maxWidth: 600,
-        }}>
-          {BAR_DATA.map((bar, i) => {
-            const start = 22 + i * 6;
-            const h = interpolate(frame, [start, start + 24], [0, bar.value * 1.25], {
-              easing: Easing.bezier(0.16, 1, 0.3, 1),
-              extrapolateLeft: "clamp", extrapolateRight: "clamp",
+        <div style={{ position: "relative", width: "100%", maxWidth: 600 }}>
+          <div style={{
+            display: "flex", alignItems: "flex-end", justifyContent: "center",
+            gap: 12, height: 190, marginBottom: 18,
+            width: "100%",
+          }}>
+            {BAR_DATA.map((bar, i) => {
+              const start = 22 + i * 6;
+              const h = interpolate(frame, [start, start + 24], [0, bar.value * 1.25], {
+                easing: Easing.bezier(0.16, 1, 0.3, 1),
+                extrapolateLeft: "clamp", extrapolateRight: "clamp",
+              });
+              const bOpacity = interpolate(frame, [start, start + 10], [0, 1], {
+                extrapolateLeft: "clamp", extrapolateRight: "clamp",
+              });
+              const glow =
+                bar.color === RED  ? `0 0 22px rgba(234, 56, 76, 0.4)` :
+                bar.color === LIGHT_RED  ? `0 0 22px rgba(234, 56, 76, 0.3)` : "none";
+
+              return (
+                <div key={i} style={{
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", gap: 6, flex: 1,
+                }}>
+                  <div style={{
+                    width: "100%", height: h, minWidth: 48,
+                    background: bar.color, borderRadius: "6px 6px 0 0",
+                    opacity: bOpacity, boxShadow: glow,
+                  }} />
+                  <span style={{
+                    fontSize: 13, color: "rgba(255,255,255,0.42)", opacity: bOpacity,
+                  }}>
+                    {bar.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Arrow that projects upward across the bars as they appear */}
+          {(() => {
+            const n = BAR_DATA.length;
+            // overall progress index (float from 0 to n-1)
+            const overallStart = 22;
+            const overallEnd = 22 + n * 6 + 12;
+            const idxF = interpolate(frame, [overallStart, overallEnd], [0, n - 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+            // compute fractional bar height by sampling each bar's current height
+            const heights = BAR_DATA.map((bar, i) => {
+              const start = 22 + i * 6;
+              return interpolate(frame, [start, start + 24], [0, bar.value * 1.25], {
+                easing: Easing.bezier(0.16, 1, 0.3, 1),
+                extrapolateLeft: "clamp", extrapolateRight: "clamp",
+              });
             });
-            const bOpacity = interpolate(frame, [start, start + 10], [0, 1], {
-              extrapolateLeft: "clamp", extrapolateRight: "clamp",
-            });
-            const glow =
-              bar.color === RED  ? `0 0 22px rgba(234, 56, 76, 0.4)` :
-              bar.color === LIGHT_RED  ? `0 0 22px rgba(234, 56, 76, 0.3)` : "none";
+
+            const lower = Math.floor(idxF);
+            const upper = Math.min(n - 1, Math.ceil(idxF));
+            const alpha = idxF - lower;
+            const hAt = heights[lower] * (1 - alpha) + heights[upper] * alpha;
+
+            // left as percentage
+            const leftPct = ((idxF + 0.5) / n) * 100;
+            const arrowOpacity = interpolate(frame, [overallStart + 2, overallStart + 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
             return (
-              <div key={i} style={{
-                display: "flex", flexDirection: "column",
-                alignItems: "center", gap: 6, flex: 1,
-              }}>
-                <div style={{
-                  width: "100%", height: h, minWidth: 48,
-                  background: bar.color, borderRadius: "6px 6px 0 0",
-                  opacity: bOpacity, boxShadow: glow,
-                }} />
-                <span style={{
-                  fontSize: 13, color: "rgba(255,255,255,0.42)", opacity: bOpacity,
-                }}>
-                  {bar.label}
-                </span>
+              <div style={{ position: "absolute", left: `${leftPct}%`, bottom: `${hAt + 8}px`, transform: "translateX(-50%)", pointerEvents: "none", opacity: arrowOpacity }}>
+                <svg width={34} height={34} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2v14" stroke={LIGHT_RED} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M18 8l-6-6-6 6" stroke={LIGHT_RED} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
             );
-          })}
+          })()}
         </div>
 
         {/* Stats row */}
@@ -147,11 +185,26 @@ export const AnalyticsScene: React.FC = () => {
         }}>
           {STATS.map((s, i) => (
             <div key={i} style={{ textAlign: "center" }}>
-              <div style={{
-                fontWeight: 900, fontSize: 38, color: RED,
-                letterSpacing: -1, lineHeight: 1,
-                textShadow: `0 0 20px rgba(234, 56, 76, 0.25)`,
-              }}>{s.value}</div>
+              {/* animate number from 0 to target */}
+              {(() => {
+                // derive numeric target and suffix
+                const raw = s.value.toString();
+                const plus = raw.includes("+");
+                const percent = raw.includes("%");
+                const target = parseInt(raw.replace(/[^0-9]/g, "")) || 0;
+                const startFrame = 56 + i * 4;
+                const endFrame = startFrame + 28;
+                const current = Math.round(interpolate(frame, [startFrame, endFrame], [0, target], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+                const display = percent ? `${current}%` : plus ? `${current}+` : `${current}`;
+                return (
+                  <div style={{
+                    fontWeight: 900, fontSize: 38, color: RED,
+                    letterSpacing: -1, lineHeight: 1,
+                    textShadow: `0 0 20px rgba(234, 56, 76, 0.25)`,
+                  }}>{display}</div>
+                );
+              })()}
+
               <div style={{
                 fontSize: 12, color: "rgba(255,255,255,0.5)",
                 textTransform: "uppercase", letterSpacing: 2, marginTop: 6,
