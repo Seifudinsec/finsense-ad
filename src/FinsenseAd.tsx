@@ -8,16 +8,19 @@ import { CreditScene } from "./scenes/CreditScene";
 import { AnalyticsScene } from "./scenes/AnalyticsScene";
 import { ReviewsScene } from "./scenes/ReviewsScene";
 import { CTAScene } from "./scenes/CTAScene";
+import { BackgroundDots } from "./components/BackgroundDots";
 
-const T = 18; // transition duration in frames
-const INTRO = 135;
-const PRODUCT = 120;
+const T = 15; // transition duration in frames
+const INTRO = 45;
+const PRODUCT = 180;
+const TRACK = 150;
 const REVIEWS = 150;
-const CTA = 240;
+const CTA = 180;
  
-export const FinsenseAd: React.FC = () => {
+export const FinSenseAd: React.FC = () => {
   return (
     <AbsoluteFill>
+      <BackgroundDots />
       <TransitionSeries>
         {/* Scene 1 — Brand Intro */}
         <TransitionSeries.Sequence durationInFrames={INTRO}>
@@ -50,7 +53,7 @@ export const FinsenseAd: React.FC = () => {
         />
  
         {/* Scene 4 — Proven Impact */}
-        <TransitionSeries.Sequence durationInFrames={PRODUCT}>
+        <TransitionSeries.Sequence durationInFrames={TRACK}>
           <AnalyticsScene />
         </TransitionSeries.Sequence>
  

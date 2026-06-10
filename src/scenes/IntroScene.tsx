@@ -2,6 +2,7 @@ import {
   AbsoluteFill,
   interpolate,
   useCurrentFrame,
+  useVideoConfig,
   Easing,
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Inter";
@@ -26,6 +27,15 @@ const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
 
 export const IntroScene: React.FC = () => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const logoDuration = Math.round(0.8 * fps);
+  const logoProgress = interpolate(frame, [0, logoDuration], [0, 1], {
+    easing: Easing.bezier(0.16, 1, 0.3, 1),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const logoScale = interpolate(logoProgress, [0, 1], [0.4, 1]);
+  const logoOpacity = logoProgress;
 
   // ── Ambient glow pulses slowly ──────────────────────────────────────────
   const glowScale = interpolate(frame, [0, 120], [0.85, 1.12], {
@@ -41,12 +51,12 @@ export const IntroScene: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
-  // ── Tagline rises after line (f 72 → 88) ────────────────────────────────
-  const taglineOpacity = interpolate(frame, [72, 88], [0, 1], {
+  // ── Tagline rises early so it's visible by f15 (0.5s) ────────────────
+  const taglineOpacity = interpolate(frame, [0, 15], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const taglineY = interpolate(frame, [72, 88], [18, 0], {
+  const taglineY = interpolate(frame, [0, 15], [12, 0], {
     easing: Easing.bezier(0.16, 1, 0.3, 1),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -93,10 +103,13 @@ export const IntroScene: React.FC = () => {
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
+        paddingLeft: 48, paddingRight: 48, width: "100%", boxSizing: "border-box",
       }}>
 
         {/* Animated logo — the star of the show */}
-        <AnimatedLogo scale={1.05} animate startFrame={0} />
+        <div style={{ transform: `scale(${logoScale})`, opacity: logoOpacity, willChange: "transform, opacity" }}>
+          <AnimatedLogo scale={1} animate={false} startFrame={0} />
+        </div>
 
         {/* Red rule sweeps in */}
         <div style={{

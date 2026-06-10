@@ -26,9 +26,9 @@ const BAR_DATA = [
 ];
 
 const STATS = [
-  { value: "99%",  label: "Satisfaction" },
-  { value: "50+",  label: "Years Team Exp" },
-  { value: "10+",  label: "Top Tier Banks" },
+  { value: "95%", label: "Satisfaction" },
+  { value: "41+", label: "Years Team Exp" },
+  { value: "7+",  label: "Top Tier Banks" },
 ];
 
 export const AnalyticsScene: React.FC = () => {
@@ -73,7 +73,7 @@ export const AnalyticsScene: React.FC = () => {
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        padding: "50px 80px 60px",
+        paddingTop: 50, paddingBottom: 60, paddingLeft: 48, paddingRight: 48, width: "100%", boxSizing: "border-box",
       }}>
 
         {/* Section indicator */}
@@ -90,8 +90,7 @@ export const AnalyticsScene: React.FC = () => {
           fontWeight: 900, fontSize: 64, color: "white",
           letterSpacing: -2, textAlign: "center", lineHeight: 1.05, marginBottom: 12,
         }}>
-          Proven Track Record & <br />
-          <span style={{ color: RED }}>Digital Growth</span>
+          East Africa's Financial Leaders Choose FinSense
         </div>
 
         {/* Subtitle */}
@@ -99,7 +98,7 @@ export const AnalyticsScene: React.FC = () => {
           opacity: subOpacity, fontSize: 19,
           color: "rgba(255,255,255,0.55)", textAlign: "center", marginBottom: 44,
         }}>
-          Accelerating transformation pipelines for East Africa's financial leaders.
+          99% project success · 95% satisfaction · 7+ top-tier banks
         </div>
 
         {/* Bar chart representing deployments/integrations */}
@@ -159,7 +158,7 @@ export const AnalyticsScene: React.FC = () => {
                 const target = parseInt(raw.replace(/[^0-9]/g, "")) || 0;
                 const startFrame = 56 + i * 4;
                 const endFrame = startFrame + 28;
-                const current = Math.round(interpolate(frame, [startFrame, endFrame], [0, target], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+                const current = Math.floor(interpolate(frame, [startFrame, endFrame], [0, target], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
                 const display = percent ? `${current}%` : plus ? `${current}+` : `${current}`;
                 return (
                   <div style={{

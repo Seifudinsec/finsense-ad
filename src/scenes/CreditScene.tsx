@@ -73,7 +73,7 @@ export const CreditScene: React.FC = () => {
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        padding: "0 90px",
+        paddingLeft: 48, paddingRight: 48, width: "100%", boxSizing: "border-box",
       }}>
 
         {/* Cloud icon */}

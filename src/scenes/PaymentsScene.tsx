@@ -49,7 +49,7 @@ export const PaymentsScene: React.FC = () => {
     easing: Easing.bezier(0.16, 1, 0.3, 1),
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
-  const count = Math.round(rawCount);
+  const count = Math.floor(rawCount);
   const countOpacity = interpolate(frame, [38, 50], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
@@ -89,7 +89,7 @@ export const PaymentsScene: React.FC = () => {
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        padding: "0 90px",
+        paddingLeft: 48, paddingRight: 48, width: "100%", boxSizing: "border-box",
       }}>
 
         {/* Link icon */}

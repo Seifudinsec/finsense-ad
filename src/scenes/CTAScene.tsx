@@ -2,6 +2,7 @@ import {
   AbsoluteFill,
   interpolate,
   useCurrentFrame,
+  useVideoConfig,
   Easing,
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Inter";
@@ -20,15 +21,36 @@ const URL_TEXT    = "finsense.co.ke";
 
 export const CTAScene: React.FC = () => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
-  // ── Logo: runs its own reveal from frame 0 (scaled down slightly) ────────
-  // In the CTA we use the same AnimatedLogo but smaller (scale 0.75)
-  const logoContainerOpacity = interpolate(frame, [0, 8], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
+  // Entrance timing (staggered)
+  const logoFrom = 0;
+  const taglineFrom = Math.round(0.3 * fps);
+  const headlineFrom = Math.round(0.6 * fps);
+  const servicesFrom = Math.round(1.0 * fps);
+  const ctaFrom = Math.round(1.5 * fps);
+  const contactFrom = Math.round(2.2 * fps);
+  const pillsFrom = Math.round(2.8 * fps);
 
-  // ── Subtle logo pulse after it lands (f 62 → 80 → 62 → 80 …) ───────────
-  // We use a slow sine-like interpolate to create a breathing pulse
+  function entrance(fromFrame: number) {
+    const progress = interpolate(frame, [fromFrame, fromFrame + 12], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+      easing: Easing.bezier(0.16, 1, 0.3, 1),
+    });
+    const y = interpolate(progress, [0, 1], [20, 0]);
+    return { progress, y };
+  }
+
+  const logoEntrance = entrance(logoFrom);
+  const taglineEntrance = entrance(taglineFrom);
+  const headlineEntrance = entrance(headlineFrom);
+  const servicesEntrance = entrance(servicesFrom);
+  const ctaEntrance = entrance(ctaFrom);
+  const detailsEntrance = entrance(contactFrom);
+  const pillsEntrance = entrance(pillsFrom);
+
+  // ── Subtle logo pulse after it lands (f ~62 onward) ───────────
   const pulse = interpolate(
     Math.sin((frame - 62) * 0.08),
     [-1, 1], [0.98, 1.03], {
@@ -36,29 +58,6 @@ export const CTAScene: React.FC = () => {
     }
   );
   const logoScale = frame < 62 ? 1 : pulse;
-
-  // ── Headline (f 20 → 38) ────────────────────────────────────────────────
-  const headlineOpacity = interpolate(frame, [20, 38], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const headlineY = interpolate(frame, [20, 38], [32, 0], {
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  // ── Sub-line (f 36 → 52) ────────────────────────────────────────────────
-  const subOpacity = interpolate(frame, [36, 52], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  // ── CTA button (f 50 → 64) ──────────────────────────────────────────────
-  const ctaOpacity = interpolate(frame, [50, 64], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const ctaScale = interpolate(frame, [50, 64], [0.82, 1], {
-    easing: Easing.bezier(0.34, 1.3, 0.64, 1),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
 
   // ── URL typewriter (f 66 → 84) ──────────────────────────────────────────
   const urlChars = Math.floor(
@@ -95,28 +94,28 @@ export const CTAScene: React.FC = () => {
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
+        paddingLeft: 48, paddingRight: 48, width: "100%", boxSizing: "border-box",
       }}>
 
 
         {/* ── Animated logo above headline (moved down) ── */}
-        <div style={{ opacity: logoContainerOpacity, transform: `scale(${logoScale})`, marginBottom: 12 }}>
+        <div style={{ opacity: logoEntrance.progress, transform: `translateY(${logoEntrance.y}px) scale(${logoScale})`, marginBottom: 12 }}>
           <AnimatedLogo scale={0.9} animate startFrame={0} />
         </div>
 
         {/* ── "Ready to co-create your future?" ── */}
-        <div style={{
-          transform: `translateY(${headlineY}px)`,
-          opacity: headlineOpacity,
-          textAlign: "center",
-          marginBottom: 16,
-        }}>
+        <div style={{ textAlign: "center", marginBottom: 16 }}>
           <div style={{
+            transform: `translateY(${taglineEntrance.y}px)`,
+            opacity: taglineEntrance.progress,
             fontWeight: 300, fontSize: 22,
             color: "rgba(255,255,255,0.52)", letterSpacing: 1, marginBottom: 6,
           }}>
             Built for Fintechs, Banks, SACCOs, and Telcos That Refuse to Compromise
           </div>
           <div style={{
+            transform: `translateY(${headlineEntrance.y}px)`,
+            opacity: headlineEntrance.progress,
             fontWeight: 900, fontSize: 64, color: "white",
             letterSpacing: -2.5, lineHeight: 1.1,
             textShadow: `0 0 60px rgba(234, 56, 76, 0.22)`,
@@ -127,7 +126,8 @@ export const CTAScene: React.FC = () => {
 
         {/* ── Services line ── */}
         <div style={{
-          opacity: subOpacity,
+          opacity: servicesEntrance.progress,
+          transform: `translateY(${servicesEntrance.y}px)`,
           fontSize: 16, color: "rgba(255,255,255,0.48)",
           textAlign: "center", marginTop: 12, marginBottom: 36,
           letterSpacing: 1.5,
@@ -138,8 +138,8 @@ export const CTAScene: React.FC = () => {
 
         {/* ── CTA button ── */}
         <div style={{
-          opacity: ctaOpacity,
-          transform: `scale(${ctaScale})`,
+          opacity: ctaEntrance.progress,
+          transform: `translateY(${ctaEntrance.y}px)`,
           background: RED,
           borderRadius: 100, padding: "17px 54px",
           fontSize: 20, fontWeight: 700, color: "white",
@@ -169,7 +169,8 @@ export const CTAScene: React.FC = () => {
 
         {/* ── Contact details ── */}
         <div style={{
-          opacity: detailsOpacity,
+          opacity: detailsEntrance.progress,
+          transform: `translateY(${detailsEntrance.y}px)`,
           display: "flex", flexDirection: "column",
           alignItems: "center", gap: 5,
           fontSize: 15, color: "rgba(255,255,255,0.52)",
@@ -191,7 +192,8 @@ export const CTAScene: React.FC = () => {
 
         {/* ── Sector pills ── */}
         <div style={{
-          opacity: detailsOpacity,
+          opacity: pillsEntrance.progress,
+          transform: `translateY(${pillsEntrance.y}px)`,
           display: "flex", gap: 10,
         }}>
           {["Banks", "Fintechs", "SACCOs", "Telcos"].map((p) => (
