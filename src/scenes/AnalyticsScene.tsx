@@ -168,11 +168,43 @@ export const AnalyticsScene: React.FC = () => {
             const leftPct = ((idxF + 0.5) / n) * 100;
             const arrowOpacity = interpolate(frame, [overallStart + 2, overallStart + 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
+            // Build a smooth curved arrow path that follows bar tops
+            const chartW = 600;
+            const chartH = 190;
+            const xs = BAR_DATA.map((_, i) => ((i + 0.5) / BAR_DATA.length) * chartW);
+            const ys = heights.map((h) => chartH - h);
+
+            // Build quadratic path through midpoints for a smooth curve
+            let d = `M ${xs[0]} ${ys[0]}`;
+            for (let i = 1; i < xs.length; i++) {
+              const cx = (xs[i - 1] + xs[i]) / 2;
+              const cy = (ys[i - 1] + ys[i]) / 2;
+              d += ` Q ${xs[i - 1]} ${ys[i - 1]} ${cx} ${cy}`;
+            }
+            // finish to last point
+            d += ` T ${xs[xs.length - 1]} ${ys[ys.length - 1]}`;
+
+            // Stroke reveal (use pathLength=100 so we can animate dashoffset cleanly)
+            const reveal = interpolate(frame, [overallStart + 4, overallEnd + 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const dash = 100 * (1 - reveal);
+
+            // Arrowhead position and rotation (approx using last segment)
+            const lx = xs[xs.length - 1];
+            const ly = ys[ys.length - 1];
+            const px = xs[xs.length - 2];
+            const py = ys[ys.length - 2];
+            const angle = (Math.atan2(ly - py, lx - px) * 180) / Math.PI;
+
             return (
-              <div style={{ position: "absolute", left: `${leftPct}%`, bottom: `${hAt + 8}px`, transform: "translateX(-50%)", pointerEvents: "none", opacity: arrowOpacity }}>
-                <svg width={34} height={34} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2v14" stroke={LIGHT_RED} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M18 8l-6-6-6 6" stroke={LIGHT_RED} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <div style={{ position: "absolute", left: 0, bottom: 0, width: chartW, height: chartH, pointerEvents: "none" }}>
+                <svg viewBox={`0 0 ${chartW} ${chartH}`} width={chartW} height={chartH} style={{ overflow: "visible" }}>
+                  <path d={d} stroke={LIGHT_RED} strokeWidth={14} strokeLinecap="round" strokeLinejoin="round" fill="none" strokeDasharray={100} strokeDashoffset={dash} pathLength={100} opacity={0.98} />
+                  {/* Arrowhead — shown when reveal > ~0.6 */}
+                  {reveal > 0.15 && (
+                    <g transform={`translate(${lx}, ${ly}) rotate(${angle})`} style={{ transformOrigin: "center center", opacity: Math.min(1, (reveal - 0.15) / 0.6) }}>
+                      <path d="M0 -10 L28 0 L0 10 Z" fill={LIGHT_RED} />
+                    </g>
+                  )}
                 </svg>
               </div>
             );
