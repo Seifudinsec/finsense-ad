@@ -73,3 +73,30 @@ export const MapPinIcon: React.FC<IconProps> = ({ size = 16, color = "currentCol
     <circle cx="12" cy="10" r="2.5" fill={color} />
   </svg>
 );
+
+export const FacebookIcon: React.FC<IconProps> = ({ size = 18, color = "currentColor", style, className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 2h-3a4 4 0 00-4 4v3H8v4h3v8h4v-8h3.5l.5-4H15V6a1 1 0 011-1h2V2z" fill={color} />
+  </svg>
+);
+
+export const TwitterIcon: React.FC<IconProps> = ({ size = 18, color = "currentColor", style, className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0016 3c-2.5 0-4.5 2.26-4.5 5.05 0 .4.05.79.15 1.16C7.72 8.95 4.1 6.86 1.67 3.9c-.44.76-.69 1.64-.69 2.58 0 1.78.9 3.36 2.27 4.28a4.48 4.48 0 01-2.04-.58v.06c0 2.5 1.75 4.6 4.07 5.08a4.52 4.52 0 01-2.03.08c.57 1.78 2.22 3.08 4.17 3.12A9.03 9.03 0 012 19.54 12.74 12.74 0 008.14 21c7.72 0 11.95-6.59 11.95-12.29 0-.19 0-.37-.01-.55A8.18 8.18 0 0023 3z" fill={color} />
+  </svg>
+);
+
+export const InstagramIcon: React.FC<IconProps> = ({ size = 20, color = "currentColor", style, className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} className={className} xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="3" width="18" height="18" rx="5" stroke={color} strokeWidth="1.4" fill="none" />
+    <circle cx="12" cy="12" r="3" stroke={color} strokeWidth="1.4" fill="none" />
+    <circle cx="17.5" cy="6.5" r="0.8" fill={color} />
+  </svg>
+);
+
+export const LinkedInIcon: React.FC<IconProps> = ({ size = 18, color = "currentColor", style, className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} className={className} xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="2" width="20" height="20" rx="3" stroke={color} strokeWidth="1.2" fill="none" />
+    <path d="M6 9H4v8h2V9zM5 6.5a1 1 0 110-2 1 1 0 010 2zM10 9h2v1.2c.3-.6 1-1.2 2.2-1.2 2.1 0 2.8 1.4 2.8 3.3V17h-2v-3.2c0-.8 0-1.8-1.2-1.8-1.2 0-1.4.9-1.4 1.8V17h-2V9z" fill={color} />
+  </svg>
+);

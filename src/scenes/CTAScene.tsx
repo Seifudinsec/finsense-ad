@@ -6,7 +6,7 @@ import {
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Inter";
 import { AnimatedLogo } from "../components/AnimatedLogo";
-import { GlobeIcon, MailIcon, PhoneIcon, MapPinIcon } from "../components/Icons";
+import { GlobeIcon, MailIcon, PhoneIcon, MapPinIcon, FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon } from "../components/Icons";
 
 const { fontFamily } = loadFont("normal", {
   weights: ["300", "400", "700", "900"],
@@ -92,19 +92,23 @@ export const CTAScene: React.FC = () => {
         pointerEvents: "none",
       }} />
 
+      {/* Top-centered logo: aligns with centered CTA content */}
+      <div style={{
+        position: "absolute",
+        top: 48,
+        left: "50%",
+        transform: "translateX(-50%)",
+        opacity: logoContainerOpacity,
+        zIndex: 4,
+      }}>
+        <AnimatedLogo scale={0.9} animate startFrame={0} />
+      </div>
+
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
       }}>
 
-        {/* ── Animated logo lockup ── */}
-        <div style={{
-          opacity: logoContainerOpacity,
-          transform: `scale(${logoScale})`,
-          marginBottom: 32,
-        }}>
-          <AnimatedLogo scale={0.78} animate startFrame={0} />
-        </div>
 
         {/* ── "Ready to co-create your future?" ── */}
         <div style={{
@@ -117,7 +121,7 @@ export const CTAScene: React.FC = () => {
             fontWeight: 300, fontSize: 22,
             color: "rgba(255,255,255,0.52)", letterSpacing: 1, marginBottom: 6,
           }}>
-            Ready to co-create your future?
+            Built for Fintechs, Banks, SACCOs, and Telcos That Refuse to Compromise
           </div>
           <div style={{
             fontWeight: 900, fontSize: 64, color: "white",
@@ -150,7 +154,7 @@ export const CTAScene: React.FC = () => {
           boxShadow: `0 0 44px rgba(234, 56, 76, 0.38)`,
           cursor: "default",
         }}>
-          Start the Conversation →
+          Get Your Integration Assessment →
         </div>
 
         {/* ── Typewriter URL ── */}
@@ -208,6 +212,30 @@ export const CTAScene: React.FC = () => {
               {p}
             </div>
           ))}
+        </div>
+
+        {/* Social icons row (bottom) */}
+        <div style={{
+          position: "absolute",
+          bottom: 36,
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: 18,
+          zIndex: 4,
+        }}>
+          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <FacebookIcon size={20} color="rgba(255,255,255,0.75)" />
+          </div>
+          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <TwitterIcon size={20} color="rgba(255,255,255,0.75)" />
+          </div>
+          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <InstagramIcon size={20} color="rgba(255,255,255,0.75)" />
+          </div>
+          <div style={{ width: 56, height: 56, borderRadius: 28, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <LinkedInIcon size={20} color="rgba(255,255,255,0.75)" />
+          </div>
         </div>
 
       </AbsoluteFill>
