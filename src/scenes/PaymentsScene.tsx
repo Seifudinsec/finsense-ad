@@ -20,6 +20,12 @@ const BG = "#080808";
 export const PaymentsScene: React.FC = () => {
   const frame = useCurrentFrame();
 
+  const bannerOpacity = interpolate(frame, [0, 15], [0, 1], {
+    easing: Easing.bezier(0.16, 1, 0.3, 1),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   /* Icon */
   const iconScale = interpolate(frame, [0, 20], [0, 1], {
     easing: Easing.bezier(0.34, 1.56, 0.64, 1),
@@ -70,6 +76,36 @@ export const PaymentsScene: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: BG, overflow: "hidden", fontFamily }}>
+
+      {/* Top banner */}
+      <div style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 100,
+        background: "#0a0a0a",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 20,
+        opacity: bannerOpacity,
+        willChange: "opacity",
+        pointerEvents: "none",
+      }}>
+        <div style={{ fontSize: 20, fontWeight: 600, color: RED, letterSpacing: 4, textTransform: "uppercase", marginBottom: 4 }}>
+          SERVICES THAT DIGITIZE YOUR BUSINESS
+        </div>
+        <div style={{ fontSize: 24, fontWeight: 700, color: "white", letterSpacing: -0.5, marginBottom: 6 }}>
+          1 of 2
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <span style={{ color: RED, fontSize: 12 }}>●</span>
+          <span style={{ color: "#333", fontSize: 12 }}>○</span>
+        </div>
+      </div>
 
       {/* Top-right ambient glow */}
       <div style={{
