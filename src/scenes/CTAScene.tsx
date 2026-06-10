@@ -92,23 +92,16 @@ export const CTAScene: React.FC = () => {
         pointerEvents: "none",
       }} />
 
-      {/* Top-centered logo: aligns with centered CTA content */}
-      <div style={{
-        position: "absolute",
-        top: 48,
-        left: "50%",
-        transform: "translateX(-50%)",
-        opacity: logoContainerOpacity,
-        zIndex: 4,
-      }}>
-        <AnimatedLogo scale={0.9} animate startFrame={0} />
-      </div>
-
       <AbsoluteFill style={{
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
       }}>
 
+
+        {/* ── Animated logo above headline (moved down) ── */}
+        <div style={{ opacity: logoContainerOpacity, transform: `scale(${logoScale})`, marginBottom: 12 }}>
+          <AnimatedLogo scale={0.9} animate startFrame={0} />
+        </div>
 
         {/* ── "Ready to co-create your future?" ── */}
         <div style={{
@@ -154,7 +147,7 @@ export const CTAScene: React.FC = () => {
           boxShadow: `0 0 44px rgba(234, 56, 76, 0.38)`,
           cursor: "default",
         }}>
-          Get Your Integration Assessment →
+          Book a Free Discovery Call →
         </div>
 
         {/* ── Typewriter URL ── */}
