@@ -57,6 +57,17 @@ export const CreditScene: React.FC = () => {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
 
+  /* Subtitle */
+  const subOpacity = interpolate(frame, [26, 42], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const subY = interpolate(frame, [26, 42], [18, 0], {
+    easing: Easing.bezier(0.16, 1, 0.3, 1),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   /* Trust badge */
   const badgeScale = animateBadge(frame);
 
@@ -154,8 +165,16 @@ export const CreditScene: React.FC = () => {
           fontWeight: 900, fontSize: 64, color: "white",
           letterSpacing: -2, textAlign: "center", lineHeight: 1.05, marginBottom: 36,
         }}>
-          DevOps &<br />
-          <span style={{ color: RED }}>Cloud Systems</span>
+          Your systems infrastructure,<br />
+          <span style={{ color: RED }}>secured & always on.</span>
+        </div>
+
+        <div style={{
+          transform: `translateY(${subY}px)`, opacity: subOpacity,
+          fontSize: 20, color: "rgba(255,255,255,0.6)",
+          textAlign: "center", lineHeight: 1.55, marginBottom: 32, maxWidth: 680,
+        }}>
+          Cloud infrastructure · DevOps automation · Security analysis
         </div>
 
         {/* Feature cards */}
