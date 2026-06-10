@@ -164,47 +164,62 @@ export const AnalyticsScene: React.FC = () => {
             const alpha = idxF - lower;
             const hAt = heights[lower] * (1 - alpha) + heights[upper] * alpha;
 
-            // left as percentage
-            const leftPct = ((idxF + 0.5) / n) * 100;
-            const arrowOpacity = interpolate(frame, [overallStart + 2, overallStart + 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-
-            // Build a smooth curved arrow path that follows bar tops
             const chartW = 600;
             const chartH = 190;
-            const xs = BAR_DATA.map((_, i) => ((i + 0.5) / BAR_DATA.length) * chartW);
-            const ys = heights.map((h) => chartH - h);
+            const paddingX = 12;
+            const xs = BAR_DATA.map((_, i) => paddingX + ((i + 0.5) / BAR_DATA.length) * (chartW - paddingX * 2));
 
-            // Build quadratic path through midpoints for a smooth curve
-            let d = `M ${xs[0]} ${ys[0]}`;
-            for (let i = 1; i < xs.length; i++) {
-              const cx = (xs[i - 1] + xs[i]) / 2;
-              const cy = (ys[i - 1] + ys[i]) / 2;
-              d += ` Q ${xs[i - 1]} ${ys[i - 1]} ${cx} ${cy}`;
+            // lift the curve slightly above the bar tops so it sits on top visually
+            const LIFT = 12; // px above bar top
+            const ys = heights.map((h) => chartH - h - LIFT);
+
+            // Catmull-Rom to cubic Bezier conversion with stronger smoothing for organic curve
+            function catmullRom2bezier(points: number[][]) {
+              if (!points || points.length < 2) return "";
+              const smoothing = 0.35; // higher -> smoother
+              let d = `M ${points[0][0]} ${points[0][1]}`;
+              for (let i = 0; i < points.length - 1; i++) {
+                const p0 = i === 0 ? points[0] : points[i - 1];
+                const p1 = points[i];
+                const p2 = points[i + 1];
+                const p3 = i + 2 < points.length ? points[i + 2] : p2;
+                const bp1x = p1[0] + (p2[0] - p0[0]) * smoothing;
+                const bp1y = p1[1] + (p2[1] - p0[1]) * smoothing;
+                const bp2x = p2[0] - (p3[0] - p1[0]) * smoothing;
+                const bp2y = p2[1] - (p3[1] - p1[1]) * smoothing;
+                d += ` C ${bp1x} ${bp1y}, ${bp2x} ${bp2y}, ${p2[0]} ${p2[1]}`;
+              }
+              return d;
             }
-            // finish to last point
-            d += ` T ${xs[xs.length - 1]} ${ys[ys.length - 1]}`;
 
-            // Stroke reveal (use pathLength=100 so we can animate dashoffset cleanly)
-            const reveal = interpolate(frame, [overallStart + 4, overallEnd + 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const pts = xs.map((x, i) => [x, ys[i]]);
+            const d = catmullRom2bezier(pts);
+
+            // reveal animation
+            const reveal = interpolate(frame, [overallStart + 6, overallEnd + 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
             const dash = 100 * (1 - reveal);
 
-            // Arrowhead position and rotation (approx using last segment)
-            const lx = xs[xs.length - 1];
-            const ly = ys[ys.length - 1];
-            const px = xs[xs.length - 2];
-            const py = ys[ys.length - 2];
-            const angle = (Math.atan2(ly - py, lx - px) * 180) / Math.PI;
+            const CYAN = "#00d6ff";
 
             return (
-              <div style={{ position: "absolute", left: 0, bottom: 0, width: chartW, height: chartH, pointerEvents: "none" }}>
+              <div style={{ position: "absolute", left: 0, bottom: 0, width: chartW, height: chartH, pointerEvents: "none", zIndex: 5 }}>
                 <svg viewBox={`0 0 ${chartW} ${chartH}`} width={chartW} height={chartH} style={{ overflow: "visible" }}>
-                  <path d={d} stroke={LIGHT_RED} strokeWidth={14} strokeLinecap="round" strokeLinejoin="round" fill="none" strokeDasharray={100} strokeDashoffset={dash} pathLength={100} opacity={0.98} />
-                  {/* Arrowhead — shown when reveal > ~0.6 */}
-                  {reveal > 0.15 && (
-                    <g transform={`translate(${lx}, ${ly}) rotate(${angle})`} style={{ transformOrigin: "center center", opacity: Math.min(1, (reveal - 0.15) / 0.6) }}>
-                      <path d="M0 -10 L28 0 L0 10 Z" fill={LIGHT_RED} />
-                    </g>
-                  )}
+                  <defs>
+                    <filter id="gGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="10" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {/* soft glow behind */}
+                  <path d={d} stroke={CYAN} strokeWidth={28} strokeLinecap="round" strokeLinejoin="round" fill="none" opacity={0.14} />
+
+                  {/* main stroke, revealed progressively */}
+                  <path d={d} stroke={CYAN} strokeWidth={14} strokeLinecap="round" strokeLinejoin="round" fill="none" strokeDasharray={100} strokeDashoffset={dash} pathLength={100} style={{ filter: "url(#gGlow)" }} />
+
                 </svg>
               </div>
             );
