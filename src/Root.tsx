@@ -5,7 +5,7 @@ export const RemotionRoot: React.FC = () => {
   return (
     <Composition
       id="FinSenseAd"
-      durationInFrames={885}
+      durationInFrames={870}
       fps={30}
       width={1080}
       height={1080}

@@ -11,7 +11,7 @@ import { CTAScene } from "./scenes/CTAScene";
 import { BackgroundDots } from "./components/BackgroundDots";
 
 const T = 15; // transition duration in frames
-const INTRO = 45;
+const INTRO = 30;
 const PRODUCT = 180;
 const TRACK = 150;
 const REVIEWS = 150;

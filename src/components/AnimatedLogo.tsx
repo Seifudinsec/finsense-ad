@@ -27,26 +27,26 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     : 1;
 
   const iconOpacity = animate
-    ? interpolate(f, [0, 8], [0, 1], {
+    ? interpolate(f, [0, 6], [0, 1], {
         extrapolateLeft: "clamp", extrapolateRight: "clamp",
       })
     : 1;
 
-  // ── Phase 2: icon slides LEFT into lockup position (f 16 → ~36) ──────────
+  // ── Phase 2: icon slides LEFT into lockup position (f ~6 → ~20) ──────────
   const slideSpring = animate
-    ? spring({ frame: f, fps, config: smooth, delay: 16 })
+    ? spring({ frame: f, fps, config: smooth, delay: 6 })
     : 1;
 
   const iconX = animate ? interpolate(slideSpring, [0, 1], [0, -104]) : -104;
 
-  // ── Phase 3: text block clip-reveals from behind icon (f 26 → ~50) ───────
+  // ── Phase 3: text block clip-reveals from behind icon (f ~12 → ~28) ───────
   const textRevealSpring = animate
-    ? spring({ frame: f, fps, config: smooth, delay: 26 })
+    ? spring({ frame: f, fps, config: smooth, delay: 12 })
     : 1;
 
   const textClipWidth = interpolate(textRevealSpring, [0, 1], [0, 280]);
   const textOpacity   = animate
-    ? interpolate(f, [26, 34], [0, 1], {
+    ? interpolate(f, [12, 20], [0, 1], {
         extrapolateLeft: "clamp", extrapolateRight: "clamp",
       })
     : 1;
